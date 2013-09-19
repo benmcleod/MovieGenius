@@ -1,0 +1,211 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Site.master.cs" Inherits="SiteMaster" %>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head runat="server">
+    <title><asp:ContentPlaceHolder ID="TitleContentPlaceHolder" runat="server"></asp:ContentPlaceHolder></title>
+    <link href="~/Styles/styles.css" rel="stylesheet" type="text/css" />
+    <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="Scripts/jquery-1.4.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("ul.topnav li").hover(function (e) { //Hover over event on list item
+                $(this).find("div.submenu").show(); //Show the subnav
+            }, function () { //on hover out...
+                $(this).css({ 'background': 'none' }); //Ditch the background
+                $(this).find("div.submenu").hide(); //Hide the subnav
+            });
+        });
+    </script>
+    <!--[if IE 9 ]><style>.sideContentHolder {border-radius: 0;}</style> <![endif]-->
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form runat="server">
+    <div class="header">
+        <div class="head-content">
+            <a href="Default.aspx">
+                <asp:Image ID="Logo" runat="server" ImageUrl="~/images/genius-logo.png" CssClass="logo" />
+            </a>
+            <div class="nav">
+                <div class="login">
+                    <%--<a href="">Login</a> | <a href="">Register</a> |--%> 
+                    <asp:DropDownList ID="DropDownList1" runat="server" CssClass="dropdown">
+                        <asp:ListItem Value="us">United States</asp:ListItem>
+                    </asp:DropDownList>
+                </div>
+                <ul class="topnav">
+                    <li class="main-li"><a href="Default.aspx" class="main-link">Home</a></li>
+                    <li class="main-li">
+                        <div class="submenu">
+                            <ul class="root">
+                                <li ><asp:LinkButton ID="lbUpcomingMovies" runat="server" CommandArgument="upcomingmovies" 
+                                onclick="LinkButton_Click">Upcoming Movies</asp:LinkButton></li>
+                                <li ><asp:LinkButton ID="lbInTheatres" runat="server" CommandArgument="intheatres" 
+                                onclick="LinkButton_Click">In Theatres</asp:LinkButton></li>
+                                <li ><asp:LinkButton ID="lbOpeningMovies" runat="server" CommandArgument="openingmovies" 
+                                onclick="LinkButton_Click">Opening Movies</asp:LinkButton></li>
+                            </ul>
+                        </div>
+                        <a class="main-link" href="javascript:void(0)">Movies <b class="caret"></b></a>
+                    </li>
+                    <li class="main-li">
+                    <div class="submenu">
+                            <ul class="root">
+                                <li ><asp:LinkButton ID="lbTopRentalsDVD" runat="server" CommandArgument="toprentals" 
+                                onclick="LinkButton_Click">Top Rentals</asp:LinkButton></li>
+                                <li ><asp:LinkButton ID="lbNewReleasesDVD" runat="server" CommandArgument="newreleases" 
+                                onclick="LinkButton_Click">New Releases</asp:LinkButton></li>
+                                <li ><asp:LinkButton ID="lbUpcomingDVD" runat="server" CommandArgument="upcomingdvds" 
+                                onclick="LinkButton_Click">Upcoming</asp:LinkButton></li>
+                            </ul>
+                        </div>
+                        <a class="main-link" href="javascript:void(0)">DVDs <b class="caret"></b></a>
+                    </li>
+                    <li class="main-li"><a href="About.aspx" class="main-link">About</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="clear">
+    </div>
+    <div class="page">
+        <div class="sidebar">
+            <div id="search">
+                <asp:TextBox ID="searhText" runat="server" Placeholder="Find Movies, DVDs and more..." CssClass="searchEntry"></asp:TextBox>
+                <asp:Button ID="searchButton" runat="server" CssClass="searchButton" Text=" " onclick="searchButton_Click" />
+            </div>
+        
+            <div class="sideContentHolder" id="upcoming-holder">
+            <h4><asp:LinkButton ID="LinkButton1" runat="server" CommandArgument="upcomingmovies" onclick="LinkButton_Click">show all</asp:LinkButton>Upcoming Movies</h4>
+
+            <asp:GridView ID="GridView1" runat="server" CellPadding="4" CellSpacing="5" 
+                    GridLines="None" ShowHeader="False" 
+                    EnableModelValidation="True" AutoGenerateColumns="False">
+                <Columns>
+                    <asp:ImageField DataImageUrlField="Poster">
+                    </asp:ImageField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton runat="server" ID="moviename" onclick="ViewDetails_Click"
+                                Text='<%# Bind("Name") %>' CommandArgument='<%# Eval("Id") %>' Font-Size="1.1em"></asp:LinkButton><br />
+                            Release Date: <asp:Label ID="Label1" runat="server" Text='<%# Bind("ReleaseDate") %>'></asp:Label><br />
+                            Rating: <asp:Label ID="Label2" runat="server" Text='<%# Bind("Rating") %>'></asp:Label><br />
+                            Runtime: <asp:Label ID="Label3" runat="server" Text='<%# Bind("Runtime") %>'></asp:Label>mins<br />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+                <RowStyle HorizontalAlign="Left" VerticalAlign="Top" />
+                </asp:GridView>
+            </div>
+        
+            <div class="sideContentHolder">
+            <h4>Box Office</h4>
+
+            <asp:GridView ID="grdBoxOffice" runat="server" CellPadding="4" CellSpacing="5" 
+                    GridLines="None" ShowHeader="False" Width="100%" AutoGenerateColumns="False" 
+                    EnableModelValidation="True" ForeColor="#333333" HorizontalAlign="Center">
+                <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
+                <Columns>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <b><asp:Literal ID="Literal1" runat="server" Text='<%# Bind("Ranking") %>'></asp:Literal></b>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton runat="server" ID="moviename"
+                                Text='<%# Bind("Name") %>' onclick="ViewDetails_Click" 
+                                CommandArgument='<%# Eval("Id") %>'></asp:LinkButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+                <EditRowStyle BackColor="#999999" />
+                <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                <HeaderStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                <PagerStyle BackColor="#284775" ForeColor="White" HorizontalAlign="Center" />
+                <RowStyle HorizontalAlign="Left" BackColor="#F7F6F3" ForeColor="#333333" />
+                <SelectedRowStyle BackColor="#E2DED6" Font-Bold="True" ForeColor="#333333" />
+                </asp:GridView>
+            </div>
+
+            <div class="sideContentHolder">
+            <h4><asp:LinkButton ID="LinkButton8" runat="server" CommandArgument="newreleases" 
+                                onclick="LinkButton_Click">show all</asp:LinkButton> New Realeases (DVD)</h4>
+
+            <asp:GridView ID="GridViewNewReleasedDVDs" runat="server" CellPadding="4" CellSpacing="5" 
+                    GridLines="None" ShowHeader="False" Width="100%" HorizontalAlign="Center" 
+                    AutoGenerateColumns="False" EnableModelValidation="True">
+                <Columns>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:ImageButton ImageUrl='<%# Eval("RowImage1") %>' onclick="ViewDetails_Click" 
+                            CommandArgument='<%# Eval("RowImage1ID") %>' runat="server" ID="ui1"></asp:ImageButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:ImageButton ImageUrl='<%# Eval("RowImage2") %>' onclick="ViewDetails_Click" 
+                            CommandArgument='<%# Eval("RowImage2ID") %>' runat="server" ID="ui2"></asp:ImageButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>                    
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:ImageButton ImageUrl='<%# Eval("RowImage3") %>' onclick="ViewDetails_Click" 
+                            CommandArgument='<%# Eval("RowImage3ID") %>' runat="server" ID="ui3"></asp:ImageButton>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+                <RowStyle HorizontalAlign="Left" />
+                </asp:GridView>
+            </div>
+
+
+        </div>
+
+        <div class="main">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+
+        <div class="clear">
+        </div>
+    </div>
+    <div class="footer">
+        <ul>
+            <li><a href="Default.aspx">Home</a></li>
+            <li> | </li>
+            <li ><asp:LinkButton ID="LinkButton2" runat="server" CommandArgument="upcomingmovies" 
+                onclick="LinkButton_Click">Upcoming Movies</asp:LinkButton></li>
+            <li> | </li>
+                <li ><asp:LinkButton ID="LinkButton3" runat="server" CommandArgument="intheatres" 
+                onclick="LinkButton_Click">In Theatres</asp:LinkButton></li>
+            <li> | </li>
+                <li ><asp:LinkButton ID="LinkButton4" runat="server" CommandArgument="openingmovies" 
+                onclick="LinkButton_Click">Opening Movies</asp:LinkButton></li>
+            <li> | </li>
+            <li ><asp:LinkButton ID="LinkButton5" runat="server" CommandArgument="toprentals" 
+                onclick="LinkButton_Click">Top Rentals (DVD)</asp:LinkButton></li>
+            <li> | </li>
+                <li ><asp:LinkButton ID="LinkButton6" runat="server" CommandArgument="newreleases" 
+                onclick="LinkButton_Click">New Releases (DVD) </asp:LinkButton></li>
+            <li> | </li>
+                <li ><asp:LinkButton ID="LinkButton7" runat="server" CommandArgument="upcomingdvds" 
+                onclick="LinkButton_Click">Upcoming DVDs</asp:LinkButton></li>
+            <li> | </li>
+            <li><a href="About.aspx">About</a></li>
+        </ul>
+
+        <a href="http://www.rottentomatoes.com">
+            <asp:Image ID="RTlogo" runat="server" ImageUrl="~/images/Rotten_Tomatoes_logo.png" /></a>
+        <a href="http://www.themoviedb.org">
+            <asp:Image ID="MDBlogo" runat="server" ImageUrl="~/images/tmdb-logo.png" /></a>
+
+        <br /><br />
+        &copy; Copyright 2012 Movie Genius. All Rights Reserved
+        
+    </div>
+    </form>
+</body>
+</html>
