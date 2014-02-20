@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Web;
 using System.Net;
@@ -224,10 +226,28 @@ public class Service
 
     private static string GetJsonResponse(string url)
     {
-        using (var client = new WebClient())
+        // stop from overusing API calls per second.
+        System.Threading.Thread.Sleep(200);
+        
+        Stream clientstream;
+        try
         {
-            client.Encoding = Encoding.UTF8;
-            return client.DownloadString(url);
+            var client = new WebClient();
+            clientstream = client.OpenRead(url);
+            var responseStream = new System.IO.Compression.GZipStream(clientstream, CompressionMode.Decompress);
+            var reader = new StreamReader(responseStream);
+            return reader.ReadToEnd();
+
+        }
+        catch (Exception)
+        {
+            using (var client = new WebClient())
+            {
+                
+                client.Encoding = Encoding.UTF8;
+                return client.DownloadString(url);
+
+            }
         }
     }
 
