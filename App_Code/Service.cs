@@ -226,21 +226,26 @@ public class Service
 
     private static string GetJsonResponse(string url)
     {
-        // stop from overusing API calls per second.
-        System.Threading.Thread.Sleep(200);
+        //// stop from overusing API calls per second.
+        //System.Threading.Thread.Sleep(300);
         
-        Stream clientstream;
-        try
-        {
-            var client = new WebClient();
-            clientstream = client.OpenRead(url);
-            var responseStream = new System.IO.Compression.GZipStream(clientstream, CompressionMode.Decompress);
-            var reader = new StreamReader(responseStream);
-            return reader.ReadToEnd();
+        //Stream clientstream;
+        //try
+        //{
+        //    var client = new WebClient();
+        //    if (client.Encoding.BodyName != "iso-8859-1")
+        //    {
+        //        var test="";
+        //    }
+        //    clientstream = client.OpenRead(url);
+        //    var responseStream = new System.IO.Compression.GZipStream(clientstream, CompressionMode.Decompress);
+        //    var reader = new StreamReader(responseStream);
+        //    var text = reader.ReadToEnd();
+        //    return text;
 
-        }
-        catch (Exception)
-        {
+        //}
+        //catch (Exception)
+        //{
             using (var client = new WebClient())
             {
                 
@@ -248,7 +253,7 @@ public class Service
                 return client.DownloadString(url);
 
             }
-        }
+       // }
     }
 
 }

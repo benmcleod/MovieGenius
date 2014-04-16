@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -134,4 +135,11 @@ public partial class _Default : System.Web.UI.Page
         public string ID { get; set; }
         public string Poster { get; set; }
     }
+
+    [WebMethod(EnableSession = true)]
+    public static void addSession(string movieID)
+    {
+        HttpContext.Current.Session.Add("movieID", movieID);
+    }
+
 }

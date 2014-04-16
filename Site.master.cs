@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Web;
+using System.Web.Services;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -128,10 +129,10 @@ public partial class SiteMaster : System.Web.UI.MasterPage
 
     protected void ViewDetails_Click(object sender, EventArgs e)
     {
-        using (StreamWriter writer = new StreamWriter(@"c:\test\debug.txt", true))
-        {
-            writer.WriteLine(DateTime.Now.ToString() + "click");
-        }
+        //using (StreamWriter writer = new StreamWriter(@"c:\test\debug.txt", true))
+        //{
+        //    writer.WriteLine(DateTime.Now.ToString() + "click");
+        //}
         LinkButton button = sender as LinkButton;
         if (sender is LinkButton)
             Session.Add("movieID", ((LinkButton)sender).CommandArgument.Trim());
@@ -141,7 +142,9 @@ public partial class SiteMaster : System.Web.UI.MasterPage
     }
     protected void searchButton_Click(object sender, EventArgs e)
     {
-        Session.Add("search", searhText.Text.Trim());
+        Session.Add("search", searchText.Text.Trim());
         Response.Redirect("SearchResults.aspx");
     }
+
+
 }

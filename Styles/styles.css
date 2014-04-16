@@ -98,6 +98,18 @@ div.nav ul.topnav li.main-li a.main-link:active
     border:1px solid #f4f4f4;
 }
 
+
+
+.margin-left
+{
+    margin-left:20px;
+}
+
+
+
+
+/* AutoComplete Search  */
+
 div#search 
 {
     margin: 10px auto;
@@ -106,17 +118,6 @@ div#search
     color:#FFFFFF;
 }
 
-div#theatre-search 
-{
-    margin: 10px auto;
-    max-width:330px;
-    min-height:45px;
-}
-
-.margin-left
-{
-    margin-left:20px;
-}
 
 input.searchEntry 
 {
@@ -124,32 +125,58 @@ input.searchEntry
 	height:35px;
 	padding:0 0 0 20px;
 	border:none;
-	width:180px;
+	width:250px;
 	background:url(../images/search_box_page.png) no-repeat 0px 0px;
 	float:left;
 	outline:none;
 }
-input.theatre-searchEntry
+
+.rating
 {
-    font-size: 1.1em;
-    height: 35px;
-    padding: 0 0 0 20px;
-    border: none;
-    width:253px;
-    background: url('../images/search_box_page.png') no-repeat 0px 0px;
-    float: left;
-    outline: none;
+    float:right;
+    position:relative;
+    top:2px;
+    right:2px;
 }
 
-.searchButton
+.thumb
 {
-    width:36px;
-	height:35px;
-	border:none;
-	float:left;
-	cursor:pointer;		
-	background:url(../images/search_box_page.png) no-repeat -275px 0px;
+    float:left;
+    position:relative;
 }
+
+.searchtitle
+{
+    font-size:16px;
+    text-decoration-color:blue;
+}
+
+.searchcenter
+{
+    position:absolute;
+    left:40px;
+    width:200px;
+}
+
+
+.thumb ui-corner-all
+{
+    width:inherit;
+}
+
+
+.ui-widget-content
+{
+    background-color:white;
+    border:2px solid #999999;
+    border-radius:0.5em;
+}
+
+/**/
+
+
+
+
 
 .sideContentHolder
 {
