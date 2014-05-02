@@ -238,7 +238,7 @@ div.featured > h5
 
 div.featured img
 {
-    margin:0 0 20px 20px;
+    /*margin:0 0 20px 20px;*/
 }
 
 div.content
@@ -265,12 +265,12 @@ div.short-description
     height:266px;
 }
 
-img.det-image
+/*img.det-image
 {
     float:left;
     width:180px;
     height:266px;
-}
+}*/
 
 .movie-summary img.pro-image
 {

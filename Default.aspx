@@ -5,24 +5,33 @@
     <asp:Literal runat="server" ID="TitleLabel"></asp:Literal>
 </asp:Content>
 <asp:Content ID="HeaderContent" runat="server" ContentPlaceHolderID="HeadContent">
-    
+
+    <script src="Scripts/jquery.bxslider.min.js" type="text/javascript"></script>
+    <link href="Styles/jquery.bxslider.css" rel="stylesheet" />
+    <script src="Scripts/bxslider.js" type="text/javascript"></script>
+
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <div class="featured">
         <h5>Featured</h5>
 
         <asp:Repeater ID="FeaturedRepeater" runat="server">
+
+            <HeaderTemplate>
+                <ul id="bxslider" class="bxslider">
+            </HeaderTemplate>
+
             <ItemTemplate>
-                <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("RottenTomatoesId") %>' OnClick="ViewDetails_Click">
-                    <asp:Image ID="Image1" runat="server"
-                        ImageUrl='<%# Eval("Posters[2].Url") %>'
-                        CssClass="det-image" />
-                </asp:LinkButton>
+                <li>
+                    <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("id") %>'
+                        OnClick="ViewDetails_Click">
+
+                        <asp:Image ID="Image1" runat="server" ImageUrl='<%# Eval("posters.detailed") %>' />
+                    </asp:LinkButton>
+                </li>
             </ItemTemplate>
         </asp:Repeater>
 
-        <div class="short-description">
-        </div>
     </div>
 
     <div class="content">
@@ -30,30 +39,30 @@
         <asp:Repeater ID="MoviesRepeater" runat="server">
             <ItemTemplate>
                 <div class="movie-summary">
-                    <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("RottenTomatoesId") %>' OnClick="ViewDetails_Click">
-                        <asp:Image ID="Image5" ImageUrl='<%# Eval("Posters[1].Url") %>' runat="server" CssClass="pro-image" />
+                    <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("id") %>' OnClick="ViewDetails_Click">
+                        <asp:Image ID="Image5" ImageUrl='<%# Eval("posters.profile") %>' runat="server" CssClass="pro-image" />
                     </asp:LinkButton>
                     <div class="pro-description">
                         <h4>
-                            <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# Eval("RottenTomatoesId") %>' OnClick="ViewDetails_Click">
-                                <asp:Literal ID="Literal1" runat="server" Text='<%# Eval("Title") %>'></asp:Literal>
-                                (<asp:Literal ID="Literal2" runat="server" Text='<%# Eval("Year") %>'></asp:Literal>)
+                            <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# Eval("id") %>' OnClick="ViewDetails_Click">
+                                <asp:Literal ID="Literal1" runat="server" Text='<%# Eval("title") %>'></asp:Literal>
+                                (<asp:Literal ID="Literal2" runat="server" Text='<%# Eval("year") %>'></asp:Literal>)
                             </asp:LinkButton></h4>
                         <div>
                             <span>
-                                <asp:Literal ID="Literal4" runat="server" Text='<%# Eval("MpaaRating") %>'></asp:Literal></span>
+                                <asp:Literal ID="Literal4" runat="server" Text='<%# Eval("mpaa_rating") %>'></asp:Literal></span>
                             Release Date: <b>
-                                <asp:Literal ID="Literal3" runat="server" Text='<%# Eval("ReleaseDates.Count").ToString() == "0" ? "Not Available" : DataBinder.Eval(Container.DataItem, "ReleaseDates[0].Date", "{0:MMMM dd, yyyy}") %>'></asp:Literal></b><br />
+                                <asp:Literal ID="Literal3" runat="server" Text='<%# Eval("release_dates.theater").ToString() == "0" ? "Not Available" : DataBinder.Eval(Container.DataItem, "release_dates.theater.Date", "{0:MMMM dd, yyyy}") %>'></asp:Literal></b><br />
                             Critics score: <b>
-                                <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("Ratings[0].Score") %>'></asp:Literal></b>
+                                <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("ratings.critics_rating") %>'></asp:Literal></b>
                             <br />
                             <br />
                         </div>
                         <div class="synopsis">
-                            <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("Synopsis") %>'></asp:Literal>
+                            <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("synopsis") %>'></asp:Literal>
                         </div>
 
-                        <asp:ImageButton ID="ImageButton1" CommandArgument='<%# Eval("RottenTomatoesId") %>' runat="server"
+                        <asp:ImageButton ID="ImageButton1" CommandArgument='<%# Eval("id") %>' runat="server"
                             ImageUrl="~/images/moviedetails.png" OnClick="ViewDetails_Click" />
                     </div>
                 </div>
@@ -61,8 +70,7 @@
         </asp:Repeater>
         <asp:Panel ID="plcPaging" runat="server" CssClass="pagination_links">
         </asp:Panel>
-        <%--<asp:PlaceHolder ID="plcPaging" runat="server" />--%>
-        
+
     </div>
 
 </asp:Content>

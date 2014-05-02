@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Web;
-using System.Web.Configuration;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using Newtonsoft.Json.Linq;
 
 public partial class MovieDetails : System.Web.UI.Page
 {
@@ -29,70 +22,49 @@ public partial class MovieDetails : System.Web.UI.Page
                     return;
                 }
                 service = new Service();
-
-
-                List<Movie> details = new List<Movie>();
-
                 movie = service.MovieInfo(MovieID);
 
-                TitleLabel.Text = movie.Title + " | Movie Genius";
-                
+                TitleLabel.Text = movie.title + " | Movie Genius";
 
-                if (movie.Genres.Count > 0)
+                if (movie.genres.Count > 0)
                 {
-                    string genres = "";
-                    for (int i = 0; i < movie.Genres.Count; i++)
-                    {
-                        genres += movie.Genres[i];
-                        if (i + 1 < movie.Genres.Count)
-                            genres += ", ";
-                    }
-                    movie.Genres[0] = genres;
+                    // Add ", " inbetween each genre
+                    movie.genres[0] = string.Join(", ", movie.genres.ToArray());
                 }
                 else
-                    movie.Genres.Add("");
+                    movie.genres.Add("");
 
-                if (movie.Directors.Count > 0)
+                if (movie.abridged_directors.Count > 0)
                 {
-                    string directors = "";
-                    for (int i = 0; i < movie.Directors.Count; i++)
-                    {
-                        directors += movie.Directors[i];
-                        if (i + 1 < movie.Directors.Count)
-                            directors += ", ";
-                    }
-                    movie.Directors[0] = directors;
-                }
-                else
-                    movie.Directors.Add("");
-
-                if (movie.Cast.Count > 0)
-                {
-                    string cast = "";
-                    for (int i = 0; i < movie.Cast.Count; i++)
-                    {
-                        cast += movie.Cast[i].Name;
-                        if (i + 1 < movie.Cast.Count)
-                            cast += ", ";
-                    }
-                    movie.Cast[0].Name = cast;
+                    // Add ", " inbetween each director
+                    movie.abridged_directors[0].name = string.Join(", ", movie.abridged_directors.ConvertAll(m => m.name).ToArray());
                 }
                 else
                 {
-                    movie.Cast.Add(new CastMember());
-                    movie.Cast[0].Name = "";
+                    movie.abridged_directors.Add(new AbridgedDirector());
+                    movie.abridged_directors[0].name = "";
                 }
 
+                if (movie.abridged_cast.Count > 0)
+                {
+                    // Add ", " inbetween each cast member
+                    movie.abridged_cast[0].name = string.Join(", ", movie.abridged_cast.ConvertAll(m => m.name).ToArray());
+                }
+                else
+                {
+                    movie.abridged_cast.Add(new AbridgedCast());
+                    movie.abridged_cast[0].name = "";
+                }
 
+                string youtubeLink = service.MovieTrailer(movie.title, movie.year);
+                movie.links.self = PrepareURL(Server.UrlPathEncode(youtubeLink));
 
-                string youtubeLink = service.MovieTrailer(movie.Title);
-
-                movie.Links[0].Url = PrepareURL(Server.UrlPathEncode(youtubeLink));
+                List<Movie> details = new List<Movie>();
                 details.Add(movie);
+
                 MoviesRepeater.DataSource = details;
                 MoviesRepeater.DataBind();
 
-                
             }
             catch (Exception)
             {

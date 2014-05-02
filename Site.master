@@ -7,16 +7,14 @@
         <asp:ContentPlaceHolder ID="TitleContentPlaceHolder" runat="server"></asp:ContentPlaceHolder>
     </title>
 
-    <script type="text/javascript" src="Scripts/jquery-1.11.0.min.js"></script>
-    <link href="Scripts/jquery-ui-1.10.4.min.css" rel="stylesheet" />
+    <script type="text/javascript" src="Scripts/jquery-1.10.1.min.js"></script>
     <script type="text/javascript" src="Scripts/jquery-ui-1.10.4.min.js"></script>
-
-
+    
+    <link href="Scripts/jquery-ui-1.10.4.min.css" rel="stylesheet" />
     <link href="~/Styles/styles.css" rel="stylesheet" type="text/css" />
     <link href="~/Styles/Site.css" rel="stylesheet" type="text/css" />
 
     <script type="text/javascript" src="Scripts/Search.js"></script>
-
 
     <script type="text/javascript">
         $(document).ready(function () {
@@ -104,18 +102,23 @@
                         GridLines="None" ShowHeader="False"
                         EnableModelValidation="True" AutoGenerateColumns="False">
                         <Columns>
-                            <asp:ImageField DataImageUrlField="Poster">
-                            </asp:ImageField>
+
+                            <asp:TemplateField>
+                                <ItemTemplate>
+                                    <asp:Image runat="server" ImageUrl='<%# Eval("posters.thumbnail") %>' />
+                                </ItemTemplate>
+                            </asp:TemplateField>
+
                             <asp:TemplateField>
                                 <ItemTemplate>
                                     <asp:LinkButton runat="server" ID="moviename" OnClick="ViewDetails_Click"
-                                        Text='<%# Bind("Name") %>' CommandArgument='<%# Eval("Id") %>' Font-Size="1.1em"></asp:LinkButton><br />
-                                    Release Date:
-                                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("ReleaseDate") %>'></asp:Label><br />
+                                        Text='<%# Bind("title") %>' CommandArgument='<%# Eval("id") %>' Font-Size="1.1em"></asp:LinkButton><br />
+                                    Release:
+                                    <asp:Label ID="Label1" runat="server" Text='<%# Bind("release_dates.theater.Date", "{0:MMMM d, yyyy}") %>'></asp:Label><br />
                                     Rating:
-                                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("Rating") %>'></asp:Label><br />
+                                    <asp:Label ID="Label2" runat="server" Text='<%# Bind("ratings.critics_rating") %>'></asp:Label><br />
                                     Runtime:
-                                    <asp:Label ID="Label3" runat="server" Text='<%# Bind("Runtime") %>'></asp:Label>mins<br />
+                                    <asp:Label ID="Label3" runat="server" Text='<%# Bind("runtime") %>'></asp:Label>mins<br />
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -134,14 +137,14 @@
                             <asp:TemplateField>
                                 <ItemTemplate>
                                     <b>
-                                        <asp:Literal ID="Literal1" runat="server" Text='<%# Bind("Ranking") %>'></asp:Literal></b>
+                                        <%# Container.DataItemIndex + 1 %>
                                 </ItemTemplate>
                             </asp:TemplateField>
                             <asp:TemplateField>
                                 <ItemTemplate>
                                     <asp:LinkButton runat="server" ID="moviename"
-                                        Text='<%# Bind("Name") %>' OnClick="ViewDetails_Click"
-                                        CommandArgument='<%# Eval("Id") %>'></asp:LinkButton>
+                                        Text='<%# Bind("title") %>' OnClick="ViewDetails_Click"
+                                        CommandArgument='<%# Eval("id") %>'></asp:LinkButton>
                                 </ItemTemplate>
                             </asp:TemplateField>
                         </Columns>
@@ -158,35 +161,29 @@
                     <h4>
                         <asp:LinkButton ID="LinkButton8" runat="server" CommandArgument="newreleases"
                             OnClick="LinkButton_Click">show all</asp:LinkButton>
-                        New Realeases (DVD)</h4>
+                        New Realeases (DVD)
+                    </h4>
 
-                    <asp:GridView ID="GridViewNewReleasedDVDs" runat="server" CellPadding="4" CellSpacing="5"
-                        GridLines="None" ShowHeader="False" Width="100%" HorizontalAlign="Center"
-                        AutoGenerateColumns="False" EnableModelValidation="True">
-                        <Columns>
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:ImageButton ImageUrl='<%# Eval("RowImage1") %>' OnClick="ViewDetails_Click"
-                                        CommandArgument='<%# Eval("RowImage1ID") %>' runat="server" ID="ui1"></asp:ImageButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:ImageButton ImageUrl='<%# Eval("RowImage2") %>' OnClick="ViewDetails_Click"
-                                        CommandArgument='<%# Eval("RowImage2ID") %>' runat="server" ID="ui2"></asp:ImageButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                            <asp:TemplateField>
-                                <ItemTemplate>
-                                    <asp:ImageButton ImageUrl='<%# Eval("RowImage3") %>' OnClick="ViewDetails_Click"
-                                        CommandArgument='<%# Eval("RowImage3ID") %>' runat="server" ID="ui3"></asp:ImageButton>
-                                </ItemTemplate>
-                            </asp:TemplateField>
-                        </Columns>
-                        <RowStyle HorizontalAlign="Left" />
-                    </asp:GridView>
+                    <asp:ListView ID="ListViewNewReleasedDVDs" runat="server" GroupItemCount="3" GroupPlaceholderID="groupPlaceHolder1"
+                        ItemPlaceholderID="itemPlaceHolder1" HorizontalAlign="Center">
+                        <LayoutTemplate>
+                            <table>
+                                <asp:PlaceHolder runat="server" ID="groupPlaceHolder1"></asp:PlaceHolder>
+                            </table>
+                        </LayoutTemplate>
+                        <GroupTemplate>
+                            <tr>
+                                <asp:PlaceHolder runat="server" ID="itemPlaceHolder1"></asp:PlaceHolder>
+                            </tr>
+                        </GroupTemplate>
+                        <ItemTemplate>
+                            <td style="padding: 5px 12px">
+                                <asp:ImageButton ImageUrl='<%# Eval("posters.thumbnail") %>' OnClick="ViewDetails_Click"
+                                    CommandArgument='<%# Eval("id") %>' runat="server" ID="ui1"></asp:ImageButton>
+                            </td>
+                        </ItemTemplate>
+                    </asp:ListView>
                 </div>
-
 
             </div>
 

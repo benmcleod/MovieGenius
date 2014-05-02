@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class SearchResults : System.Web.UI.Page
 { 
     Service service;
-    Movie[] movies;
+    MovieObject movies;
 
     public int TotalCount
     {
@@ -35,19 +31,19 @@ public partial class SearchResults : System.Web.UI.Page
         try
         {
             string name = Session["search"] == null ? "" : Session["search"].ToString();
-            movies = service.SearchMovie(name, pageNumber).ToArray();
+            movies = service.SearchMovie(name, pageNumber);
 
             PagedDataSource page = new PagedDataSource();
             page.AllowCustomPaging = true;
             page.AllowPaging = true;
-            page.DataSource = movies;
+            page.DataSource = movies.movies.ToArray();
             page.PageSize = 10;
             MoviesRepeater.DataSource = page;
             MoviesRepeater.DataBind();
 
             if (!IsPostBack)
             {
-                TotalCount = movies[0].SiblingsCount;
+                TotalCount = movies.total;
                 CreatePagingControl();
             }
             else

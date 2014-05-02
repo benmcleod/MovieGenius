@@ -1,27 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Services;
-using System.Web.UI;
 using System.Web.UI.WebControls;
 
 public partial class _Default : System.Web.UI.Page
 {
     Service service;
-    Movie[] movies;
-
-    public int TotalCount
-    {
-        set { ViewState.Add("totalcount", value); }
-        get { return (int)ViewState["totalcount"]; }
-    }
-
-    public int CurrentPage
-    {
-        set { ViewState.Add("currentPage", value); }
-        get { return ViewState["currentPage"]==null ? 1 : (int)ViewState["currentPage"]; }
-    }
+    MovieObject movieObject;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -29,13 +12,9 @@ public partial class _Default : System.Web.UI.Page
 
         service = new Service();
 
-        movies = service.FindCurrentDVDs(1).ToArray();
-        List<Movie> featured = new List<Movie>();
+        movieObject = service.FindTopRentalDVDs();
 
-        for (int i = 0; i < 3; i++)
-            featured.Add(movies[i]);
-
-        FeaturedRepeater.DataSource = featured;
+        FeaturedRepeater.DataSource = movieObject.movies;
         FeaturedRepeater.DataBind();
 
         FetchData(CurrentPage);
@@ -45,19 +24,19 @@ public partial class _Default : System.Web.UI.Page
     {
         try
         {
-            movies = service.FindMoviesInTheaterList(pageNumber).ToArray();
+            movieObject = service.FindMoviesInTheaterList(pageNumber);
 
             PagedDataSource page = new PagedDataSource();
             page.AllowCustomPaging = true;
             page.AllowPaging = true;
-            page.DataSource = movies;
+            page.DataSource = movieObject.movies;
             page.PageSize = 10;
             MoviesRepeater.DataSource = page;
             MoviesRepeater.DataBind();
 
             if (!IsPostBack)
             {
-                TotalCount = movies[0].SiblingsCount;
+                TotalCount = movieObject.total;
                 CreatePagingControl();
             }
             else
@@ -130,16 +109,16 @@ public partial class _Default : System.Web.UI.Page
         Response.Redirect("MovieDetails.aspx");
     }
 
-    class Featured
+    public int TotalCount
     {
-        public string ID { get; set; }
-        public string Poster { get; set; }
+        set { ViewState.Add("totalcount", value); }
+        get { return (int)ViewState["totalcount"]; }
     }
 
-    [WebMethod(EnableSession = true)]
-    public static void addSession(string movieID)
+    public int CurrentPage
     {
-        HttpContext.Current.Session.Add("movieID", movieID);
+        set { ViewState.Add("currentPage", value); }
+        get { return ViewState["currentPage"] == null ? 1 : (int)ViewState["currentPage"]; }
     }
 
 }

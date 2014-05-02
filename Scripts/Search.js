@@ -1,8 +1,6 @@
 ﻿/// <reference path="jquery-1.11.0.min.js" />
 
-
 var apikey = "xv4ug7nk4rcppc29jjak36pp";
-//var apikey = '<%=ConfigurationManager.ConnectionStrings["ApiKeyRT"].ConnectionString %>'
 
 $(document).ready(function () {
     var searchField = $('[id$=searchText]');
@@ -80,7 +78,6 @@ $(document).ready(function () {
             $('<div style="clear:both">').addClass("searchcenter").appendTo(a);
 
             if (item.label) {
-                
                 $('<span>').addClass('searchtitle').text(item.label + " (" + item.year + ")").appendTo(a);
             }
 
@@ -92,8 +89,6 @@ $(document).ready(function () {
 
             $('</div>').appendTo(a);
 
-            
-
             a.appendTo(li);
         }
         else {
@@ -101,6 +96,5 @@ $(document).ready(function () {
         }
         return li.appendTo(ul);
     };
-
 
 });

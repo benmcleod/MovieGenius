@@ -1,24 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.IO.Compression;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
 using System.Linq;
-using System.Web;
 using System.Net;
 using System.Text;
-using System.Data.SqlClient;
-using System.Data;
 using System.Web.Configuration;
-using Newtonsoft.Json.Linq;
 
 
-public class Service 
+public class Service
 {
     private const string LIST_BOX_OFFICE = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?country=us&apikey={0}&page_limit=10";
 
     private const string LIST_IN_THEATERS = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey={0}&page={1}&page_limit=10";
 
-    private const string LIST_UPCOMING = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?apikey={0}&page_limit=10";
+    private const string LIST_UPCOMING = @"http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?apikey={0}&page_limit={1}";
 
     private const string LIST_CURRENT_DVD = @"http://api.rottentomatoes.com/api/public/v1.0/lists/dvds/current_releases.json?apikey={0}&page={1}&page_limit=10";
 
@@ -38,103 +33,101 @@ public class Service
 
     private const string MOVIE_SIMILAR = @"http://api.rottentomatoes.com/api/public/v1.0/movies/{0}/similar.json?apikey={1}&limit=5";
 
-
-    public MovieSearchResults FindBoxOfficeList()
+    public MovieObject FindBoxOfficeList()
     {
 
         var url = string.Format(LIST_BOX_OFFICE, WebConfigurationManager.AppSettings["ApiKeyRT"]);
         string jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
     }
 
-
-    public MovieSearchResults FindMoviesInTheaterList(int page)
+    public MovieObject FindMoviesInTheaterList(int page)
     {
 
         var url = string.Format(LIST_IN_THEATERS, WebConfigurationManager.AppSettings["ApiKeyRT"], page);
         string jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
     }
 
 
-    public MovieSearchResults FindUpcomingMoviesList()
+    public MovieObject FindUpcomingMoviesList(int page)
     {
 
-        var url = string.Format(LIST_UPCOMING, WebConfigurationManager.AppSettings["ApiKeyRT"]);
+        var url = string.Format(LIST_UPCOMING, WebConfigurationManager.AppSettings["ApiKeyRT"], page);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
     }
 
 
-    public MovieSearchResults FindTopRentalDVDs()
+    public MovieObject FindTopRentalDVDs()
     {
         var url = string.Format(LIST_TOP_RENTALS_DVD, WebConfigurationManager.AppSettings["ApiKeyRT"]);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
 
     }
 
 
-    public MovieSearchResults FindCurrentDVDs(int page)
+    public MovieObject FindCurrentDVDs(int page)
     {
 
         var url = string.Format(LIST_CURRENT_DVD, WebConfigurationManager.AppSettings["ApiKeyRT"], page);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
 
     }
 
 
-    public MovieSearchResults FindNewReleasedDVDs(int page)
+    public MovieObject FindNewReleasedDVDs(int page)
     {
 
         var url = string.Format(LIST_NEW_RELEASE_DVD, WebConfigurationManager.AppSettings["ApiKeyRT"], page);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
 
     }
 
 
-    public MovieSearchResults FindOpeningMovies()
+    public MovieObject FindOpeningMovies()
     {
         var url = string.Format(LIST_OPENING_MOVIE, WebConfigurationManager.AppSettings["ApiKeyRT"]);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
 
     }
 
 
-    public MovieSearchResults FindUpcomingDVDs(int page)
+    public MovieObject FindUpcomingDVDs(int page)
     {
         var url = string.Format(LIST_UPCOMING_DVD, WebConfigurationManager.AppSettings["ApiKeyRT"], page);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
 
     }
 
 
-    public MovieSearchResults SearchMovie(string MovieName, int page)
+    public MovieObject SearchMovie(string MovieName, int page)
     {
 
         var url = string.Format(LIST_SEARCH_MOVIE, WebConfigurationManager.AppSettings["ApiKeyRT"], MovieName, page);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
     }
@@ -145,36 +138,38 @@ public class Service
 
         var url = string.Format(MOVIE_INFO, WebConfigurationManager.AppSettings["ApiKeyRT"], MovieID);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovie(jsonResponse);
-
+        
+        Movie results = JsonConvert.DeserializeObject<Movie>(jsonResponse);
+        
         return results;
     }
 
 
-    public ReviewSearchResults MovieReviews(int MovieID)
-    {
-        var url = string.Format(MOVIE_REVIEWS, MovieID, WebConfigurationManager.AppSettings["ApiKeyRT"]);
-        var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseReviewSearchResults(jsonResponse);
+    //public ReviewSearchResults MovieReviews(int MovieID)
+    //{
+    //    var url = string.Format(MOVIE_REVIEWS, MovieID, WebConfigurationManager.AppSettings["ApiKeyRT"]);
+    //    var jsonResponse = GetJsonResponse(url);
+    //    ReviewSearchResults results = JsonConvert.DeserializeObject<ReviewSearchResults>(jsonResponse);
 
-        return results;
-    }
+    //    return results;
+    //}
 
 
-    public MovieSearchResults MovieSimilar(int MovieID)
+    public MovieObject MovieSimilar(int MovieID)
     {
         var url = string.Format(MOVIE_SIMILAR, MovieID, WebConfigurationManager.AppSettings["ApiKeyRT"]);
         var jsonResponse = GetJsonResponse(url);
-        var results = Parser.ParseMovieSearchResults(jsonResponse);
+
+        MovieObject results = JsonConvert.DeserializeObject<MovieObject>(jsonResponse);
 
         return results;
     }
 
 
-    public string MovieTrailer(string title)
+    public string MovieTrailer(string title, int Year)
     {
-        
-        
+
+
 
         var request = System.Net.WebRequest.Create("http://private-3d34-themoviedb.apiary.io/3/search/movie?api_key=" + WebConfigurationManager.AppSettings["ApiKeyMDB"] + "&query=" + title + "&append_to_response=trailers&page=1") as System.Net.HttpWebRequest;
         request.Method = "GET";
@@ -188,15 +183,11 @@ public class Service
             {
                 responseContent = reader.ReadToEnd();
 
+                MovieVideo result = JsonConvert.DeserializeObject<MovieVideo>(responseContent);
+                DateTime d = new DateTime(Year, 1, 1);
+                var id = result.results.Find(p => DateTime.Parse(p.release_date).Year == d.Year).id;
 
-                JObject o = JObject.Parse(responseContent);
-
-                var id =
-                    from p in o["results"]
-                    select (int)p["id"];
-
-
-                var request2 = System.Net.WebRequest.Create("http://private-3d34-themoviedb.apiary.io/3/movie/" + id.First().ToString() + "/trailers?api_key=" + WebConfigurationManager.AppSettings["ApiKeyMDB"]) as System.Net.HttpWebRequest;
+                var request2 = System.Net.WebRequest.Create("http://private-3d34-themoviedb.apiary.io/3/movie/" + id.ToString() + "/trailers?api_key=" + WebConfigurationManager.AppSettings["ApiKeyMDB"]) as System.Net.HttpWebRequest;
                 request2.Method = "GET";
                 request2.Accept = "application/json";
                 request2.ContentLength = 0;
@@ -205,10 +196,10 @@ public class Service
                     using (var reader2 = new System.IO.StreamReader(response2.GetResponseStream()))
                     {
                         responseContent = reader2.ReadToEnd();
-                        o = JObject.Parse(responseContent);
+                        var o2 = JObject.Parse(responseContent);
 
                         var youtube =
-                            from p in o["youtube"]
+                            from p in o2["youtube"]
                             select (string)p["source"];
 
                         if (youtube.Count() > 0)
@@ -228,15 +219,10 @@ public class Service
     {
         //// stop from overusing API calls per second.
         //System.Threading.Thread.Sleep(300);
-        
+
         //Stream clientstream;
         //try
         //{
-        //    var client = new WebClient();
-        //    if (client.Encoding.BodyName != "iso-8859-1")
-        //    {
-        //        var test="";
-        //    }
         //    clientstream = client.OpenRead(url);
         //    var responseStream = new System.IO.Compression.GZipStream(clientstream, CompressionMode.Decompress);
         //    var reader = new StreamReader(responseStream);
@@ -246,14 +232,14 @@ public class Service
         //}
         //catch (Exception)
         //{
-            using (var client = new WebClient())
-            {
-                
-                client.Encoding = Encoding.UTF8;
-                return client.DownloadString(url);
+        using (var client = new WebClient())
+        {
 
-            }
-       // }
+            client.Encoding = Encoding.UTF8;
+            return client.DownloadString(url);
+
+        }
+        // }
     }
 
 }
