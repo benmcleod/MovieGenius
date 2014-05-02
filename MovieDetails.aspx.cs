@@ -59,8 +59,8 @@ public partial class MovieDetails : System.Web.UI.Page
                 string youtubeLink = service.MovieTrailer(movie.title, movie.year);
                 movie.links.self = PrepareURL(Server.UrlPathEncode(youtubeLink));
 
-                List<Movie> details = new List<Movie>();
-                details.Add(movie);
+                List<Movie> details = new List<Movie>(1){movie};
+                //details.Add(movie);
 
                 MoviesRepeater.DataSource = details;
                 MoviesRepeater.DataBind();
