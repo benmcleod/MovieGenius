@@ -15,57 +15,52 @@
             <ItemTemplate>
                 <div class="movie-details">
                     <a href="">
-                        <asp:Image ID="Image5" ImageUrl='<%# Eval("posters.detailed") %>' runat="server" CssClass="pro-image" />
+                        <asp:Image ID="Image5" ImageUrl='<%# ("http://image.tmdb.org/t/p/w185") + Eval("poster_path") %>' runat="server" CssClass="pro-image" />
                     </a>
                     <div class="pro-description">
                         <h4><a href="">
                             <asp:Literal ID="Literal1" runat="server" Text='<%# Eval("title") %>'></asp:Literal>
-                            (<asp:Literal ID="Literal2" runat="server" Text='<%# Eval("year") %>'></asp:Literal>)
                         </a></h4>
                         <div>
-                            <span>
-                                <asp:Literal ID="Literal4" runat="server" Text='<%# Eval("mpaa_rating") %>'></asp:Literal></span>
                             Release Date: <b>
-                                <asp:Literal ID="Literal3" runat="server" Text='<%# Eval("release_dates.theater").ToString() == "0" ? "Not Available" :  DataBinder.Eval(Container.DataItem, "release_dates.theater.Date", "{0:MMMM dd, yyyy}") %>'></asp:Literal></b>
+                                <asp:Literal ID="Literal3" runat="server" Text='<%# Eval("release_date") %>'></asp:Literal></b>
                             <br />
                             Runtime: <b>
                                 <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("runtime") %>'></asp:Literal>mins</b>
 
                             <br />
                             Critics Rating: <b>
-                                <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("ratings.critics_rating") %>'></asp:Literal></b><br />
+                                <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("vote_average") %>'></asp:Literal></b><br />
                             <br />
                             <br />
 
                         </div>
                         <div class="synopsis">
                             Synopsis:<br />
-                            <asp:Literal ID="Literal7" runat="server" Text='<%# Eval("synopsis") %>'></asp:Literal>
+                            <asp:Literal ID="Literal7" runat="server" Text='<%# Eval("overview") %>'></asp:Literal>
                             <br />
                             <br />
                         </div>
 
                         Director(s): <b>
-                            <asp:Literal ID="lblDirectors" Text='<%# Eval("abridged_directors[0].name") %>' runat="server"></asp:Literal></b>
+                            <asp:Literal ID="lblDirectors" Text='<%# GetDirector((Credits)Eval("credits")) %>' runat="server"></asp:Literal></b>
                         <br />
                         <br />
 
                     </div>
                     <div class="synopsis">
                         Genre(s): <b>
-                            <asp:Literal ID="lblGenres" Text='<%# Eval("genres[0]") %>' runat="server"></asp:Literal></b>
+                            <asp:Literal ID="lblGenres" Text='<%# GetGenre((List<Genre>) Eval("genres")) %>' runat="server"></asp:Literal></b>
                         <br />
                         <br />
                         Cast(s): <b>
-                            <asp:Literal ID="lblCasts" Text='<%# Eval("abridged_cast[0].name") %>' runat="server"></asp:Literal></b>
+                            <asp:Literal ID="lblCasts" Text='<%# GetCast((Credits)Eval("credits")) %>' runat="server"></asp:Literal></b>
                         <br />
                         <br />
                     </div>
                     <iframe
                         width="580" height="345"
-                        src='<%# DataBinder.Eval(Container.DataItem, "links.self", "http://www.youtube.com/v/{0}?version=3") %>'
-                        type="application/x-shockwave-flash">
-            </iframe>
+                        src=<%# GetVideo((Videos) Eval("videos"))%>></iframe>
                 </div>
             </ItemTemplate>
         </asp:Repeater>

@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 public partial class SiteMaster : System.Web.UI.MasterPage
 {
     Service service;
-    MovieObject movieObject;
+    RootObject movieObject;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -12,22 +12,16 @@ public partial class SiteMaster : System.Web.UI.MasterPage
         {
             service = new Service();
 
-            movieObject = service.FindBoxOfficeList();
+            movieObject = service.FindTopRatedMovies(1);
 
-            grdBoxOffice.DataSource = movieObject.movies;
-            grdBoxOffice.DataBind();
+            grdTopRated.DataSource = movieObject.results;
+            grdTopRated.DataBind();
 
-            movieObject = service.FindUpcomingMoviesList(5);
+            movieObject = service.FindUpcomingMoviesList(1);
 
-            GridView1.DataSource = movieObject.movies;
+            GridView1.DataSource = movieObject.results.GetRange(0,5);
             GridView1.DataBind();
-
-            movieObject = service.FindNewReleasedDVDs(1);
-            movieObject.movies.RemoveAt(9);
-
-
-            ListViewNewReleasedDVDs.DataSource = movieObject.movies;
-            ListViewNewReleasedDVDs.DataBind();
+            
         }
     }
 

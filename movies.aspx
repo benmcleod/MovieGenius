@@ -15,28 +15,27 @@
             <ItemTemplate>
                 <div class="movie-summary">
                     <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("id") %>' OnClick="ViewDetails_Click">
-                        <asp:Image ID="Image5" ImageUrl='<%# Eval("posters.profile") %>' runat="server" CssClass="pro-image" />
+                        <asp:Image ID="Image5" ImageUrl='<%# ("http://image.tmdb.org/t/p/w185") + Eval("poster_path") %>' runat="server" CssClass="pro-image" />
                     </asp:LinkButton>
                     <div class="pro-description">
                         <h4>
                             <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# Eval("id") %>' OnClick="ViewDetails_Click">
                                 <asp:Literal ID="Literal1" runat="server" Text='<%# Eval("title") %>'></asp:Literal>
-                                (<asp:Literal ID="Literal2" runat="server" Text='<%# Eval("year") %>'></asp:Literal>)
                             </asp:LinkButton></h4>
                         <div>
-                            <span>
+                            <%--<span>
                                 <asp:Literal ID="Literal4" runat="server" Text='<%# Eval("mpaa_rating") %>'></asp:Literal>
-                            </span>
+                            </span>--%>
                             Release Date: <b>
-                                <asp:Literal ID="Literal3" runat="server" Text='<%# Eval("release_dates.Count").ToString() == "0" ? "Not Available" : DataBinder.Eval(Container.DataItem, "release_dates.theater", "{0:MMMM dd, yyyy}") %>'></asp:Literal></b>
+                                <asp:Literal ID="Literal3" runat="server" Text='<%# Eval("release_date") %>'></asp:Literal></b>
                             <br />
-                            Critics score: <b>
-                                <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("ratings.critics_rating") %>'></asp:Literal></b>
+                            Score: <b>
+                                <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("vote_average") %>'></asp:Literal></b>
                             <br />
                             <br />
                         </div>
                         <div class="synopsis">
-                            <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("synopsis") %>'></asp:Literal>
+                            <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("overview") %>'></asp:Literal>
                         </div>
 
                         <asp:ImageButton ID="ImageButton1" CommandArgument='<%# Eval("id") %>' runat="server"

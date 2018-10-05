@@ -32,7 +32,6 @@
 
        <div id="three-columns_new">
         <h2>Creators</h2>
-        <p>Chirag Agrawal </p>
         <p>Ben Mcleod </p>
         <p>Ayyub Junior Morgan </p>
     </p>

@@ -5,7 +5,7 @@ using System.Web.UI.WebControls;
 public partial class _Movies : System.Web.UI.Page
 {
     Service service;
-    MovieObject movies;
+    RootObject movies;
 
     public int TotalCount
     {
@@ -40,57 +40,53 @@ public partial class _Movies : System.Web.UI.Page
                     case "upcomingmovies":
                         Heading.Text = "Upcoming Movies";
                         TitleLabel.Text = "Upcoming Movies | Movie Genius";
-                        movies = service.FindUpcomingMoviesList(10);
+                        movies = service.FindUpcomingMoviesList(1);
                         break;
 
-                    case "intheatres":
+                    case "popularmovies":
+                        Heading.Text = "Popular Movies";
+                        TitleLabel.Text = "Popular Movies | Movie Genius";
+                        movies = service.FindPopularMovies(1);
+                        break;
+
+                    case "topratedmovies":
+                        Heading.Text = "Top Rated Movies";
+                        TitleLabel.Text = "Top Rated Movies | Movie Genius";
+                        movies = service.FindTopRatedMovies(1);
+                        break;
+
+                    default://"intheatres":
                         Heading.Text = "In Theatres";
                         TitleLabel.Text = "In Theatres | Movie Genius";
                         movies = service.FindMoviesInTheaterList(pageNumber);
                         break;
 
-                    case "openingmovies":
-                        Heading.Text = "Opening Movies";
-                        TitleLabel.Text = "Opening Movies | Movie Genius";
-                        movies = service.FindOpeningMovies();
-                        break;
+                    //case "openingmovies":
+                    //    Heading.Text = "Opening Movies";
+                    //    TitleLabel.Text = "Opening Movies | Movie Genius";
+                    //    movies = service.FindOpeningMovies();
+                    //    break;
 
-                    case "toprentals":
-                        Heading.Text = "Top Rentals (DVD)";
-                        TitleLabel.Text = "Top Rentals (DVD) | Movie Genius";
-                        movies = service.FindTopRentalDVDs();
-                        break;
-
-                    case "newreleases":
-                        Heading.Text = "New Releases (DVD)";
-                        TitleLabel.Text = "New Releases (DVD) | Movie Genius";
-                        movies = service.FindNewReleasedDVDs(pageNumber);
-                        break;
-
-                    case "upcomingdvds":
-                        Heading.Text = "Upcoming DVDs";
-                        TitleLabel.Text = "Upcoming DVDs | Movie Genius";
-                        movies = service.FindUpcomingDVDs(pageNumber);
-                        break;
-
-                    default: 
-                        Heading.Text = "Upcoming Movies";
-                        TitleLabel.Text = "Upcoming Movies | Movie Genius";
-                        movies = service.FindUpcomingMoviesList(10);
-                        break;
+                    
+                    
+                    //default: 
+                    //    Heading.Text = "Upcoming Movies";
+                    //    TitleLabel.Text = "Upcoming Movies | Movie Genius";
+                    //    movies = service.FindUpcomingMoviesList(10);
+                    //    break;
                 }
 
                 PagedDataSource page = new PagedDataSource();
                 page.AllowCustomPaging = true;
                 page.AllowPaging = true;
-                page.DataSource = movies.movies.ToArray();
+                page.DataSource = movies.results.ToArray();
                 page.PageSize = 10;
                 MoviesRepeater.DataSource = page;
                 MoviesRepeater.DataBind();
 
                 if (!IsPostBack)
                 {
-                    TotalCount = movies.total;
+                    TotalCount = movies.total_results;
                     CreatePagingControl();
                 }
                 else

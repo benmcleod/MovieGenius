@@ -13,7 +13,7 @@
 </asp:Content>
 <asp:Content ID="BodyContent" runat="server" ContentPlaceHolderID="MainContent">
     <div class="featured">
-        <h5>Featured</h5>
+        <h5>Popular</h5>
 
         <asp:Repeater ID="FeaturedRepeater" runat="server">
 
@@ -26,7 +26,7 @@
                     <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("id") %>'
                         OnClick="ViewDetails_Click">
 
-                        <asp:Image ID="Image1" runat="server" ImageUrl='<%# Eval("posters.detailed") %>' />
+                        <asp:Image ID="Image1" runat="server" ImageUrl='<%# ("http://image.tmdb.org/t/p/w185") + Eval("poster_path") %>' />
                     </asp:LinkButton>
                 </li>
             </ItemTemplate>
@@ -40,15 +40,16 @@
             <ItemTemplate>
                 <div class="movie-summary">
                     <asp:LinkButton ID="LinkButton1" runat="server" CommandArgument='<%# Eval("id") %>' OnClick="ViewDetails_Click">
-                        <asp:Image ID="Image5" ImageUrl='<%# Eval("posters.profile") %>' runat="server" CssClass="pro-image" />
+                        <asp:Image ID="Image5" ImageUrl='<%#("http://image.tmdb.org/t/p/w185") + Eval("poster_path") %>' runat="server" CssClass="pro-image" />
                     </asp:LinkButton>
                     <div class="pro-description">
                         <h4>
                             <asp:LinkButton ID="LinkButton2" runat="server" CommandArgument='<%# Eval("id") %>' OnClick="ViewDetails_Click">
                                 <asp:Literal ID="Literal1" runat="server" Text='<%# Eval("title") %>'></asp:Literal>
-                                (<asp:Literal ID="Literal2" runat="server" Text='<%# Eval("year") %>'></asp:Literal>)
-                            </asp:LinkButton></h4>
-                        <div>
+                               <%-- (<asp:Literal ID="Literal2" runat="server" Text='<%# Eval("release_date") %>'></asp:Literal>)--%>
+                            </asp:LinkButton>
+                        </h4>
+                        <%--<div>
                             <span>
                                 <asp:Literal ID="Literal4" runat="server" Text='<%# Eval("mpaa_rating") %>'></asp:Literal></span>
                             Release Date: <b>
@@ -57,13 +58,13 @@
                                 <asp:Literal ID="Literal6" runat="server" Text='<%# Eval("ratings.critics_rating") %>'></asp:Literal></b>
                             <br />
                             <br />
-                        </div>
+                        </div>--%>
                         <div class="synopsis">
-                            <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("synopsis") %>'></asp:Literal>
+                            <asp:Literal ID="Literal5" runat="server" Text='<%# Eval("overview") %>'></asp:Literal>
                         </div>
 
-                        <asp:ImageButton ID="ImageButton1" CommandArgument='<%# Eval("id") %>' runat="server"
-                            ImageUrl="~/images/moviedetails.png" OnClick="ViewDetails_Click" />
+                        <%--<asp:ImageButton ID="ImageButton1" CommandArgument='<%# Eval("id") %>' runat="server"
+                            ImageUrl="~/images/moviedetails.png" OnClick="ViewDetails_Click" />--%>
                     </div>
                 </div>
             </ItemTemplate>

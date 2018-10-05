@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 public partial class _Default : System.Web.UI.Page
 {
     Service service;
-    MovieObject movieObject;
+    RootObject movieObject;
 
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -12,9 +12,9 @@ public partial class _Default : System.Web.UI.Page
 
         service = new Service();
 
-        movieObject = service.FindTopRentalDVDs();
+        movieObject = service.FindPopularMovies(1);
 
-        FeaturedRepeater.DataSource = movieObject.movies;
+        FeaturedRepeater.DataSource = movieObject.results;
         FeaturedRepeater.DataBind();
 
         FetchData(CurrentPage);
@@ -29,14 +29,14 @@ public partial class _Default : System.Web.UI.Page
             PagedDataSource page = new PagedDataSource();
             page.AllowCustomPaging = true;
             page.AllowPaging = true;
-            page.DataSource = movieObject.movies;
+            page.DataSource = movieObject.results;
             page.PageSize = 10;
             MoviesRepeater.DataSource = page;
             MoviesRepeater.DataBind();
 
             if (!IsPostBack)
             {
-                TotalCount = movieObject.total;
+                TotalCount = movieObject.total_results;
                 CreatePagingControl();
             }
             else

@@ -4,7 +4,7 @@ using System.Web.UI.WebControls;
 public partial class SearchResults : System.Web.UI.Page
 { 
     Service service;
-    MovieObject movies;
+    RootObject movies;
 
     public int TotalCount
     {
@@ -31,19 +31,19 @@ public partial class SearchResults : System.Web.UI.Page
         try
         {
             string name = Session["search"] == null ? "" : Session["search"].ToString();
-            movies = service.SearchMovie(name, pageNumber);
+            movies = service.FindMultiSearch(pageNumber, name);
 
             PagedDataSource page = new PagedDataSource();
             page.AllowCustomPaging = true;
             page.AllowPaging = true;
-            page.DataSource = movies.movies.ToArray();
+            page.DataSource = movies.results.ToArray();
             page.PageSize = 10;
             MoviesRepeater.DataSource = page;
             MoviesRepeater.DataBind();
 
             if (!IsPostBack)
             {
-                TotalCount = movies.total;
+                TotalCount = movies.total_results;
                 CreatePagingControl();
             }
             else
@@ -53,7 +53,8 @@ public partial class SearchResults : System.Web.UI.Page
             }
             ResultsCount.Text = "Displaying " + TotalCount + " results";
         }
-        catch (Exception) {
+        catch (Exception)
+        {
             ResultsCount.Text = "No results found.";
         }
     }
