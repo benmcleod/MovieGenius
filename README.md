@@ -4,6 +4,4 @@ MovieGenius
 
 ![alt text](https://github.com/benmcleod/MovieGenius/blob/master/Screenshots/Autocomplete.png)
 
-![alt text](https://github.com/benmcleod/MovieGenius/blob/master/Screenshots/MainPage.png)
-
-![alt text](https://github.com/benmcleod/MovieGenius/blob/master/Screenshots/AutoSelect.png)
+![alt text](https://github.com/benmcleod/MovieGenius/blob/master/Screenshots/MovieDetails2.png)
